@@ -1,8 +1,12 @@
 "use client";
 
 import React from "react";
+import { Trash2 } from "lucide-react";
 
-export default function TaskTable({ tasks }) {
+export default function TaskTable({ 
+  tasks,
+  handleDeleteTask,
+}) {
 
   return (
 
@@ -13,7 +17,7 @@ export default function TaskTable({ tasks }) {
 
         {/* ================= TABLE HEADINGS ================= */}
 
-        <div className="grid grid-cols-7 bg-zinc-900 p-4 font-semibold border-b border-zinc-800 min-w-[900px]">
+        <div className="grid grid-cols-8 bg-zinc-900 p-4 font-semibold border-b border-zinc-800 min-w-[900px]">
 
           <div>Task</div>
 
@@ -29,6 +33,8 @@ export default function TaskTable({ tasks }) {
 
           <div>Due</div>
 
+          <div></div>
+
         </div>
 
         {/* ================= TASK ROWS ================= */}
@@ -37,7 +43,7 @@ export default function TaskTable({ tasks }) {
 
           <div
             key={index}
-            className="grid grid-cols-7 min-w-[900px] p-4 border-b border-zinc-800 hover:bg-zinc-900 transition items-center"
+            className="grid grid-cols-8 min-w-[900px] p-4 border-b border-zinc-800 hover:bg-zinc-900 transition items-center"
           >
 
             {/* task title */}
@@ -117,6 +123,15 @@ export default function TaskTable({ tasks }) {
 
               {task.due}
 
+            </div>
+
+            <div>
+              <button
+                onClick={() => handleDeleteTask(task.id)}
+                className="text-red-500 hover:text-red-600 transition"
+              >
+                <Trash2 size={18} />
+              </button>
             </div>
 
           </div>

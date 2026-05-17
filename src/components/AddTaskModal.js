@@ -3,6 +3,7 @@
 import React from "react";
 
 import { X } from "lucide-react";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 export default function AddTaskModal({
 
@@ -14,6 +15,10 @@ export default function AddTaskModal({
 
   assignedTo,
   setAssignedTo,
+
+  selectedWorkspace,
+  setSelectedWorkspace,
+  workspaces,
 
   priority,
   setPriority,
@@ -82,6 +87,19 @@ export default function AddTaskModal({
             className="bg-black border border-zinc-700 rounded-xl p-3 outline-none"
           />
 
+          {/* workspace selection */}
+          <select
+            value={selectedWorkspace}
+            onChange={(e) => setSelectedWorkspace(e.target.value)}
+            className="bg-black border border-zinc-700 rounded-xl p-3 outline-none"
+          >
+            {workspaces.map((workspace, index) => (
+              <option key={index}>
+                {workspace}
+              </option>
+            ))}
+          </select>
+
           {/* priority dropdown */}
           <select
             value={priority}
@@ -100,6 +118,7 @@ export default function AddTaskModal({
           {/* due date input */}
           <input
             type="date"
+            min={new Date().toISOString().split("T")[0]} // set minimum date to today
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             className="bg-black border border-zinc-700 rounded-xl p-3 outline-none"
