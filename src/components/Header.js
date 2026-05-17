@@ -4,6 +4,8 @@ import React from "react";
 
 export default function Header({
   setShowModal,
+  activeWorkspace,
+  takeCount,
 }) {
 
   return (
@@ -16,14 +18,14 @@ export default function Header({
         {/* page title */}
         <h1 className="text-3xl font-bold">
 
-          My Inbox
+          {activeWorkspace}
 
         </h1>
 
         {/* task count */}
         <p className="text-zinc-500">
 
-          6 tasks
+          {takeCount} tasks
 
         </p>
 

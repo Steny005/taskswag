@@ -16,16 +16,11 @@ export default function Dashboard() {
 
   // modal visibility state
   const [showModal, setShowModal] = useState(false);
-
   // task form states
   const [taskTitle, setTaskTitle] = useState("");
-
   const [selectedWorkspace, setSelectedWorkspace] = useState("AI Club");
-
   const [assignedTo, setAssignedTo] = useState("");
-
   const [priority, setPriority] = useState("High");
-
   const today = new Date();
   const thirdDay = new Date(
     today.setDate(today.getDate() + 3)
@@ -42,9 +37,20 @@ export default function Dashboard() {
 
   // temporary task data
   const [tasks, setTasks] = useState([]);
-    
+  const [activeWorkspace, setActiveWorkspace] = useState("My Inbox");
 
-// create new task
+  const filteredtasks = activeWorkspace === "My Inbox"
+    ? tasks
+    : tasks.filter((task) => task.workspace === activeWorkspace);    
+
+
+  const stats ={
+    total: filteredtasks.length,
+    todo: filteredtasks.filter((task) => task.status === "Todo").length,
+    inProgress: filteredtasks.filter((task) => task.status === "In Progress").length,
+    completed: filteredtasks.filter((task) => task.status === "Completed").length,
+  }
+
 
   // fetch tasks from database
 const fetchTasks = async () => {
@@ -226,20 +232,29 @@ const handleUpdateStatus = async (id, currentStatus) => {
     <div className="flex h-screen bg-black text-white">
 
       {/* sidebar */}
-      <Sidebar workspaces={workspaces} />
+      <Sidebar workspaces={workspaces}
+      activeWorkspace={activeWorkspace}
+      setActiveWorkspace={setActiveWorkspace}
+       />
 
       {/* main content */}
       <div className="flex-1 overflow-y-auto">
 
         {/* top header */}
-        <Header setShowModal={setShowModal} />
+        <Header
+         setShowModal={setShowModal}
+         activeWorkspace={activeWorkspace}
+         takeCount={filteredtasks.length}
+         />
 
         {/* stats cards */}
-        <StatsCards />
+        <StatsCards 
+        stats={stats}
+        />
 
         {/* task table */}
         <TaskTable
-          tasks={tasks}
+          tasks={filteredtasks}
           handleDeleteTask={handleDeleteTask}   
           handleUpdateStatus={handleUpdateStatus}
           handleUpdatePriority={handleUpdatePriority} 

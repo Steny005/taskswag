@@ -8,7 +8,11 @@ import {
   LogOut,
 } from "lucide-react";
 
-export default function Sidebar({ workspaces }) {
+export default function Sidebar({
+  workspaces,
+  activeWorkspace,
+  setActiveWorkspace,
+ }) {
 
   return (
 
@@ -33,25 +37,29 @@ export default function Sidebar({ workspaces }) {
         </div>
 
         {/* inbox */}
-        <div className="p-4">
+        <div
+  onClick={() =>
+    setActiveWorkspace("My Inbox")
+  }
 
-          <button className="w-full flex items-center justify-between bg-zinc-900 hover:bg-zinc-800 p-4 rounded-xl transition">
+  className={`
+    flex items-center gap-3 p-3 rounded-xl cursor-pointer transition
 
-            <div className="flex items-center gap-3">
+    ${
+      activeWorkspace === "My Inbox"
+        ? "bg-zinc-800"
+        : "hover:bg-zinc-900"
+    }
+  `}
+>
 
-              <LayoutDashboard size={18} />
+  <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
 
-              <span>My Inbox</span>
+  <span>
+    My Inbox
+  </span>
 
-            </div>
-
-            <span className="bg-zinc-700 px-2 py-1 rounded-lg text-sm">
-              6
-            </span>
-
-          </button>
-
-        </div>
+</div>
 
         {/* workspace heading */}
         <div className="px-6 py-2 text-zinc-500 text-sm font-semibold">
@@ -65,10 +73,24 @@ export default function Sidebar({ workspaces }) {
 
           {workspaces.map((workspace, index) => (
 
-            <button
-              key={index}
-              className="flex items-center justify-between hover:bg-zinc-900 p-3 rounded-xl transition"
-            >
+            <div
+  key={index}
+
+  onClick={() =>
+    setActiveWorkspace(workspace)
+  }
+
+  className={`
+    flex items-center justify-between
+    p-3 rounded-xl cursor-pointer transition
+
+    ${
+      activeWorkspace === workspace
+        ? "bg-zinc-800"
+        : "hover:bg-zinc-900"
+    }
+  `}
+>
 
               <span>{workspace}</span>
 
@@ -76,7 +98,7 @@ export default function Sidebar({ workspaces }) {
                 {index + 3}
               </span>
 
-            </button>
+            </div >
 
           ))}
 

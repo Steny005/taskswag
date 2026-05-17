@@ -2,28 +2,28 @@
 
 import React from "react";
 
-export default function StatsCards() {
+export default function StatsCards({ stats, }) {
 
   // stats data
-  const stats = [
+  const statsData = [
     {
       title: "Total",
-      value: 6,
+      value: stats.total,
       color: "text-white",
     },
     {
       title: "Todo",
-      value: 3,
+      value: stats.todo,
       color: "text-white",
     },
     {
       title: "In Progress",
-      value: 1,
+      value: stats.inProgress,
       color: "text-blue-400",
     },
     {
       title: "Completed",
-      value: 2,
+      value: stats.completed,
       color: "text-emerald-400",
     },
   ];
@@ -33,7 +33,7 @@ export default function StatsCards() {
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 p-6">
 
       {/* looping through stats */}
-      {stats.map((stat, index) => (
+      {statsData.map((stat, index) => (
 
         <div
           key={index}
