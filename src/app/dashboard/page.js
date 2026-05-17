@@ -96,6 +96,64 @@ const handleDeleteTask = async (id) => {
     fetchTasks();
 }
 
+const handleUpdateStatus = async (id, currentStatus) => {
+  let newStatus;
+  if (currentStatus === "Todo") {
+    newStatus = "In Progress";
+  }
+  else if (currentStatus === "In Progress") {
+    newStatus = "Completed";}
+  else {
+    newStatus = "Todo";
+  }
+  
+  const { error } = await supabase
+    .from("tasks")
+    .update({status: newStatus})
+    .eq("id",id);
+    
+    if (error) {
+      console.log("Error updating task status:", error);
+      alert("Failed to update task. Please try again.");
+      return;
+    }
+
+    fetchTasks();
+  }
+
+  const handleUpdatePriority = async (id, newPriority) => {
+    const {error} = await supabase
+      .from("tasks")
+      .update({priority: newPriority})
+      .eq("id",id);
+
+    if (error) {
+      console.log("Error updating task priority:", error);
+      alert("Failed to update task priority. Please try again.");
+      return;
+    }
+
+    fetchTasks();
+  }
+
+  const handleUpdateDate = async (id, newDate) => {
+    const todayDate = new Date().toISOString().split("T")[0];
+    if (newDate < todayDate) {
+      alert("Due date cannot be in the past");
+      return;
+    }
+    const {error} = await supabase
+      .from("tasks")
+      .update({due_date: newDate})
+      .eq("id",id);
+    
+    if (error) {
+      console.log("Error updating task date:", error);
+      alert("Failed to update task date. Please try again.");
+      return;
+    }
+    fetchTasks();
+  }
 
 
   // new task object
@@ -126,6 +184,7 @@ const handleDeleteTask = async (id) => {
     return;
   }
   // add new task to existing tasks
+  console.log(dueDate);
   const{ data, error } = await supabase
     .from("tasks")
     .insert([{
@@ -136,6 +195,7 @@ const handleDeleteTask = async (id) => {
       priority: priority,
       status: "Todo",
       due_date: dueDate,
+      
     }])
     .select();
 
@@ -145,17 +205,7 @@ const handleDeleteTask = async (id) => {
     return;
   }
 
-  setTasks([{
-  id: data[0].id,
-  title: data[0].title,
-  workspace: data[0].workspace,
-  assignedBy: data[0].assigned_by,
-  assignedTo: data[0].assigned_to,
-  priority: data[0].priority,
-  status: data[0].status,
-  due: data[0].due_date,
-}, ...tasks
-    ]);
+  fetchTasks();
 
   // clear inputs
   setTaskTitle("");
@@ -190,7 +240,10 @@ const handleDeleteTask = async (id) => {
         {/* task table */}
         <TaskTable
           tasks={tasks}
-          handleDeleteTask={handleDeleteTask}      
+          handleDeleteTask={handleDeleteTask}   
+          handleUpdateStatus={handleUpdateStatus}
+          handleUpdatePriority={handleUpdatePriority} 
+          handleUpdateDate={handleUpdateDate}  
         />
 
       </div>
